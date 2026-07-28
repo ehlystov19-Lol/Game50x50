@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_gm"]
+[ext_resource type="PackedScene" path="res://scenes/ui_build_menu.tscn" id="3_ui_menu"]
+[ext_resource type="Script" path="res://scripts/grid_world.gd" id="4_grid_world"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("2_gm")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HSplitContainer" type="HSplitContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 640
+
+[node name="LeftUI" type="Control" parent="CanvasLayer/HSplitContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UIBuildMenu" parent="CanvasLayer/HSplitContainer/LeftUI" instance=ExtResource("3_ui_menu")]
+layout_mode = 1
+
+[node name="RightGameViewport" type="SubViewportContainer" parent="CanvasLayer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/HSplitContainer/RightGameViewport"]
+handle_input_locally = false
+size = Vector2i(640, 720)
+render_target_update_mode = 4
+
+[node name="GridWorld" type="Node2D" parent="CanvasLayer/HSplitContainer/RightGameViewport/SubViewport"]
+script = ExtResource("4_grid_world")
+
+[node name="Camera2D" type="Camera2D" parent="CanvasLayer/HSplitContainer/RightGameViewport/SubViewport/GridWorld"]
+
+[node name="PreviewSprite" type="Sprite2D" parent="CanvasLayer/HSplitContainer/RightGameViewport/SubViewport/GridWorld"]
+visible = false
+modulate = Color(0, 1, 0, 0.5)
+
+[node name="PreviewRect" type="ColorRect" parent="CanvasLayer/HSplitContainer/RightGameViewport/SubViewport/GridWorld/PreviewSprite"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="GridLines" type="Node2D" parent="CanvasLayer/HSplitContainer/RightGameViewport/SubViewport/GridWorld"]

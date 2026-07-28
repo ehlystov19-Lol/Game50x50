@@ -1,0 +1,135 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui_build_menu.gd" id="1_build_menu"]
+[ext_resource type="PackedScene" path="res://scenes/golden_square.tscn" id="2_golden_sq"]
+
+[node name="UIBuildMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_build_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.14, 0.18, 0.95)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GoldLabel" type="Label" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Золото: 15.0"
+
+[node name="ScoreLabel" type="Label" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Очки: 0"
+horizontal_alignment = 2
+
+[node name="GoldenSquare" parent="VBoxContainer" instance=ExtResource("2_golden_sq")]
+layout_mode = 2
+
+[node name="BuildSection" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/BuildSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🏗️ Меню Построек:"
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/BuildSection"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+
+[node name="BtnKingdom" type="Button" parent="VBoxContainer/BuildSection/Grid"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🏰 Королевство\n(10.0 Золота)"
+
+[node name="BtnMill" type="Button" parent="VBoxContainer/BuildSection/Grid"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🌾 Мельница\n(2.0 Золота)"
+
+[node name="BtnWall" type="Button" parent="VBoxContainer/BuildSection/Grid"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🧱 Стена\n(0.1 Золота)"
+
+[node name="BtnTower" type="Button" parent="VBoxContainer/BuildSection/Grid"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "🏹 Башня / Воин\n(5.0 Золота)"
+
+[node name="BtnBarracks" type="Button" parent="VBoxContainer/BuildSection/Grid"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "⚔️ Казарма (Враги)\n(5.0 Золота)"
+
+[node name="UpgradeSection" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="VBoxContainer/UpgradeSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "⚡ Прокачка Построек:"
+
+[node name="UpgradePanel" type="PanelContainer" parent="VBoxContainer/UpgradeSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/UpgradeSection/UpgradePanel"]
+layout_mode = 2
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+theme_override_constants/separation = 10
+
+[node name="InfoLabel" type="Label" parent="VBoxContainer/UpgradeSection/UpgradePanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Кликните на объект на карте для прокачки"
+autowrap_mode = 2
+
+[node name="UpgradeButton" type="Button" parent="VBoxContainer/UpgradeSection/UpgradePanel/VBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+text = "Улучшить"
