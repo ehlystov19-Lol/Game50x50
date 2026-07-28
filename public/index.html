@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINGDOM WARS 50x50 — Онлайн Стратегия</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="glass-card login-card">
+            <div class="logo-title">
+                <span class="neon-gold">KINGDOM</span>
+                <span class="neon-cyan">WARS</span>
+                <span class="badge-50">50x50</span>
+            </div>
+            <p class="subtitle">Добывай золото, строй Королевство, Башни и Казармы!</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="player-name">Имя Правителя</label>
+                    <input type="text" id="player-name" maxlength="15" placeholder="Введите имя..." required autocomplete="off" value="Король">
+                </div>
+
+                <div class="form-group">
+                    <label>Цвет Флага</label>
+                    <div class="color-picker" id="color-picker">
+                        <div class="color-opt active" data-color="#00f3ff" style="background: #00f3ff; box-shadow: 0 0 12px #00f3ff;"></div>
+                        <div class="color-opt" data-color="#ff007f" style="background: #ff007f; box-shadow: 0 0 12px #ff007f;"></div>
+                        <div class="color-opt" data-color="#39ff14" style="background: #39ff14; box-shadow: 0 0 12px #39ff14;"></div>
+                        <div class="color-opt" data-color="#ffe600" style="background: #ffe600; box-shadow: 0 0 12px #ffe600;"></div>
+                        <div class="color-opt" data-color="#9d00ff" style="background: #9d00ff; box-shadow: 0 0 12px #9d00ff;"></div>
+                        <div class="color-opt" data-color="#ff5500" style="background: #ff5500; box-shadow: 0 0 12px #ff5500;"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-play">
+                    <span>ОСНОВАТЬ ИМПЕРИЮ</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Game App -->
+    <div id="game-app" class="hidden">
+        <!-- Top Navigation Header -->
+        <header class="game-header">
+            <div class="header-left">
+                <div class="logo-mini">KINGDOM WARS <span>50x50</span></div>
+                <div class="resource-badge gold-badge" id="btn-gold-mine">
+                    <span class="icon">🪙</span>
+                    <span class="label">ЗОЛОТО:</span>
+                    <strong id="gold-val">15.0</strong>
+                    <div id="gold-cd-overlay" class="cd-overlay"></div>
+                </div>
+                <div class="resource-badge score-badge">
+                    <span class="icon">⭐</span>
+                    <span class="label">ОЧКИ:</span>
+                    <strong id="score-val">0</strong>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <button class="btn-warrior-up" id="btn-upgrade-warriors">
+                    <span>⚔️ Прокачать Войско (Ур. <span id="warrior-lvl">1</span>/50)</span>
+                    <small>Урон/HP: <span id="warrior-stat">1</span> | <span id="warrior-cost">5g</span></small>
+                </button>
+            </div>
+
+            <div class="header-right">
+                <div class="ping-tag green" id="ping-tag">PING: -- ms</div>
+            </div>
+        </header>
+
+        <!-- Main Workspace (Canvas + UI Overlays) -->
+        <main class="game-viewport">
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- Bottom Building Selector Bar -->
+            <div class="build-bar">
+                <div class="bar-title">МОИ ПОСТРОЙКИ:</div>
+                <div class="build-options">
+                    <button class="build-btn active" data-type="select">
+                        <span class="b-icon">🔍</span>
+                        <span class="b-name">Инспектор</span>
+                        <span class="b-cost">Клик</span>
+                    </button>
+                    <button class="build-btn" data-type="kingdom">
+                        <span class="b-icon">👑</span>
+                        <span class="b-name">Королевство</span>
+                        <span class="b-cost">10.0 Золота</span>
+                    </button>
+                    <button class="build-btn" data-type="mill">
+                        <span class="b-icon">🌾</span>
+                        <span class="b-name">Мельница</span>
+                        <span class="b-cost">2.0 Золота</span>
+                    </button>
+                    <button class="build-btn" data-type="wall">
+                        <span class="b-icon">🛡️</span>
+                        <span class="b-name">Стена</span>
+                        <span class="b-cost">0.1 Золота</span>
+                    </button>
+                    <button class="build-btn" data-type="tower">
+                        <span class="b-icon">🏹</span>
+                        <span class="b-name">Башня</span>
+                        <span class="b-cost">5.0 Золота</span>
+                    </button>
+                    <button class="build-btn" data-type="barracks">
+                        <span class="b-icon">⚔️</span>
+                        <span class="b-name">Казарма</span>
+                        <span class="b-cost">8.0 Золота</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Sidebar: Leaderboard & Inspector Panel -->
+            <aside class="right-hud">
+                <!-- Inspector Card -->
+                <div class="hud-panel inspector-panel hidden" id="inspector-panel">
+                    <div class="panel-header" id="inspect-title">Постройка</div>
+                    <div class="panel-body">
+                        <div class="inspect-row">Владелец: <strong id="inspect-owner">-</strong></div>
+                        <div class="inspect-row">Уровень: <strong id="inspect-level">1</strong></div>
+                        <div class="stat-bar-container">
+                            <span>HP:</span>
+                            <div class="hp-bar-outer"><div class="hp-bar-inner" id="inspect-hp-bar"></div></div>
+                            <small id="inspect-hp-val">100/100</small>
+                        </div>
+                        <button class="btn-upgrade-building" id="btn-upgrade-building">
+                            <span>УЛУЧШИТЬ ПОСТРОЙКУ</span>
+                            <small id="inspect-upgrade-cost">Цена: 15g</small>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Panel -->
+                <div class="hud-panel leaderboard-panel">
+                    <div class="panel-header">🏆 ТОП КОРОЛЕВСТВ</div>
+                    <ul id="leaderboard-ul" class="leaderboard-ul"></ul>
+                </div>
+
+                <!-- Chat Box -->
+                <div class="hud-panel chat-panel">
+                    <div class="panel-header">💬 ЧАТ АРЕНЫ</div>
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <form id="chat-form" class="chat-form">
+                        <input type="text" id="chat-input" placeholder="Нажмите Enter..." autocomplete="off" maxlength="80">
+                    </form>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
